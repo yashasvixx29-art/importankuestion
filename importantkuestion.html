@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your kabootar has a kuestion.💘</title> 
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      color: #ff4d6d;
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    #yesBtn {
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #ccc;
+      position: absolute;
+    }
+
+    /* HEARTS */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti"></canvas>
+
+  <div class="container" id="container">
+    <h1>my chocomuffin, will i be your forever valentine? 💌</h1> 
+    <button id="yesBtn">YES OFC</button> 
+    <button id="noBtn">No </button> 
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const container = document.getElementById("container");
+
+    // NO button runs away
+    noBtn.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    });
+
+    // HEART GENERATOR
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerText = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 300);
+
+    // CONFETTI
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confetti = [];
+
+    function createConfetti() {
+      for (let i = 0; i < 200; i++) {
+        confetti.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          r: Math.random() * 6 + 4,
+          dx: (Math.random() - 0.5) * 10,
+          dy: (Math.random() - 0.5) * 10,
+          color: `hsl(${Math.random() * 360}, 100%, 60%)`
+        });
+      }
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach((c, i) => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+        c.x += c.dx;
+        c.y += c.dy;
+        c.dy += 0.1;
+        c.r *= 0.99;
+        if (c.r < 1) confetti.splice(i, 1);
+      });
+      requestAnimationFrame(animateConfetti);
+    }
+
+    yesBtn.addEventListener("click", () => {
+      container.innerHTML = "<h1>YIPPE 🥳💘</h1>";
+      createConfetti();
+      animateConfetti();
+    });
+  </script>
+
+</body>
+</html>
